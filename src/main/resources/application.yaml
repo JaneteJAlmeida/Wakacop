@@ -1,3 +1,17 @@
+server:
+  servlet:
+    context-path: /wakacop
 spring:
-  application:
-    name: wakacop
+  datasource:
+    url: jdbc:h2:mem:wakacopdb
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+  h2:
+    console:
+      enabled: true
+
