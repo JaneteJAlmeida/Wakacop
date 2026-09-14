@@ -4,7 +4,11 @@ import academy.wakanda.wakacop.pauta.application.service.PautaRepository;
 import academy.wakanda.wakacop.pauta.domain.Pauta;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.hibernate.boot.models.annotations.internal.NotFoundAnnotation;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+import java.util.UUID;
 
 
 @Repository
@@ -19,5 +23,14 @@ public class PautaInfraRepository implements PautaRepository {
         pautaSpringDataJPARespository.save(pauta);
         log.info("[finish] PautaInfraRepository - salva");
         return pauta;
+    }
+
+    @Override
+    public Pauta buscaPautaPorId(UUID idPauta) {
+        log.info("[start] PautaInfraRepository = buscaPautaPorId");
+        Pauta pautaPorId = pautaSpringDataJPARespository.findById(idPauta)
+                        .orElseThrow(() -> new RuntimeException("Pauta não encontrada"));
+        log.info("[finish] PautaInfraRepository = buscaPautaPorId");
+        return null;
     }
 }
