@@ -15,6 +15,7 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VotoPauta {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "uuid", updatable = false, unique = true, nullable = false)
@@ -32,4 +33,7 @@ public class VotoPauta {
         this.opcaoVoto = votoRequest.getOpcao();
         this.momentoVoto = LocalDateTime.now();
     }
+    public UUID getIdSessao(){
+    return this.sessaoVotacao.getId();
+}
 }

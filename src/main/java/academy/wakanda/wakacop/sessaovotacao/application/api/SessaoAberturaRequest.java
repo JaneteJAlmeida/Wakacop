@@ -7,15 +7,16 @@ import lombok.ToString;
 import java.util.Optional;
 import java.util.UUID;
 
-
+@Getter
 @ToString
 public class SessaoAberturaRequest {
-    @Getter
+
     @NotNull
     private UUID idPauta;
     private Integer tempoDuracao;
 
-    public Optional<Integer> getTempoDuracao(){
+    public Optional<Integer> obterTempoDuracao(){
+
         return Optional.ofNullable(this.tempoDuracao);
     }
 
