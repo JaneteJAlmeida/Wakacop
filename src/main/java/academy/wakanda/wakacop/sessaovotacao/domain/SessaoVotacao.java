@@ -2,6 +2,7 @@ package academy.wakanda.wakacop.sessaovotacao.domain;
 
 import academy.wakanda.wakacop.pauta.domain.Pauta;
 import academy.wakanda.wakacop.sessaovotacao.api.VotoRequest;
+import academy.wakanda.wakacop.sessaovotacao.application.api.ResultadoSessaoResponse;
 import academy.wakanda.wakacop.sessaovotacao.application.api.SessaoAberturaRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -32,7 +33,6 @@ public class SessaoVotacao {
 
     @OneToMany(mappedBy = "sessaoVotacao", cascade = CascadeType.ALL, orphanRemoval = true)
     @MapKey(name = "cpfAssociado")
-    // CORRIGIDO: Alterado de HashMap para Map
     private Map<String, VotoPauta> votos;
 
     public SessaoVotacao(SessaoAberturaRequest sessaoAberturaRequest, Pauta pauta) {
@@ -54,14 +54,14 @@ public class SessaoVotacao {
 
     private void validaSessaoAberta() {
         atualizaStatus();
-        if (this.status.equals(StatusSessaoVotacao.FECHADA)){
+        if (this.status.equals(StatusSessaoVotacao.FECHADA)) {
             throw new RuntimeException("Sessão está fechada!");
         }
     }
 
     private void atualizaStatus() {
-        if(this.status.equals(StatusSessaoVotacao.ABERTA)){
-            if (LocalDateTime.now().isAfter(this.momentoEncerramento)){
+        if (this.status.equals(StatusSessaoVotacao.ABERTA)) {
+            if (LocalDateTime.now().isAfter(this.momentoEncerramento)) {
                 fechaSessao();
             }
         }
@@ -72,8 +72,32 @@ public class SessaoVotacao {
     }
 
     private void validaAssociado(String cpfAssociado) {
-        if(this.votos.containsKey(cpfAssociado)){
+        if(this.votos.containsKey(cpfAssociado)) {
             throw new RuntimeException("Associado já votou nessa Sessão!");
         }
     }
-}
+        public ResultadoSessaoResponse obetmResultado() {
+            atualizaStatus();
+            return new ResultadoSessaoResponse(this);
+        }
+
+        public Long getTotalVotos () {
+            return Long.valueOf(this.votos.size());
+        }
+
+        public Long getTotalSim () {
+            return calculaVotosPorOpcao(OpcaoVoto.SIM);
+        }
+
+        public Long getTotalNao () {
+            return calculaVotosPorOpcao(OpcaoVoto.NAO);
+
+        }
+
+        private Long calculaVotosPorOpcao (OpcaoVoto opcao){
+            return votos.values().stream()
+                    .filter(voto -> voto.opcaoIgual(opcao))
+                    .count();
+
+        }
+    }
