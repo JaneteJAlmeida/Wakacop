@@ -1,5 +1,5 @@
 package academy.wakanda.wakacop.associado.application.service;
 
 public interface AssociadoService {
-    void validaAssociadoAptoVoto(String cpfAssociado);
+    void validaAssociadoAptoVoto(String cpfAssociado, String dataNascimento);
 }

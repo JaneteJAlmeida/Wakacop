@@ -1,6 +1,5 @@
 package academy.wakanda.wakacop.sessaovotacao.api;
 
-import academy.wakanda.wakacop.sessaovotacao.domain.OpcaoVoto;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -8,5 +7,7 @@ import lombok.ToString;
 @ToString
 public class VotoRequest {
     private String cpfAssociado;
-    private OpcaoVoto opcao;
+    private String opcao;
+    private String dataNascimento;
 }
+

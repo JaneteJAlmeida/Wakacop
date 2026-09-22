@@ -47,7 +47,7 @@ public class SessaoVotacao {
 
     public VotoPauta recebeVoto(VotoRequest votoRequest, AssociadoService associadoService) {
         validaSessaoAberta();
-        validaAssociado(votoRequest.getCpfAssociado(), associadoService);
+        validaAssociado(votoRequest.getCpfAssociado(), votoRequest.getDataNascimento(), associadoService);
         VotoPauta voto = new VotoPauta(this, votoRequest);
         votos.put(votoRequest.getCpfAssociado(), voto);
         return voto;
@@ -72,10 +72,12 @@ public class SessaoVotacao {
         this.status = StatusSessaoVotacao.FECHADA;
     }
 
-    private void validaAssociado(String cpfAssociado, AssociadoService associadoService) {
-        associadoService.validaAssociadoAptoVoto(cpfAssociado);
+    private void validaAssociado(String cpfAssociado, String dataNascimento, AssociadoService associadoService) {
+        associadoService.validaAssociadoAptoVoto(cpfAssociado, dataNascimento);
+
         validaVotoDuplicado(cpfAssociado);
-    }
+
+}
     public void validaVotoDuplicado(String cpfAssociado){
         if(this.votos.containsKey(cpfAssociado)) {
             throw new RuntimeException("Associado já votou nessa Sessão!");

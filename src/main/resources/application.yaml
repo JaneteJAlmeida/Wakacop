@@ -15,3 +15,6 @@ spring:
     console:
       enabled: true
 
+  logging:
+    level:
+      academy.wakanda: ${LOG_LEVEL:DEBUG}
