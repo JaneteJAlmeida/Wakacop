@@ -1,20 +1,20 @@
 server:
   servlet:
     context-path: /wakacop
+
 spring:
   datasource:
-    url: jdbc:h2:mem:wakacopdb
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    url: jdbc:postgresql://localhost:5434/postgres
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
-  h2:
-    console:
-      enabled: true
+    show-sql: true
 
-  logging:
-    level:
-      academy.wakanda: ${LOG_LEVEL:DEBUG}
+logging:
+  level:
+    academy.wakanda: ${LOG_LEVEL:DEBUG}

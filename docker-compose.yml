@@ -1,0 +1,17 @@
+version: "3.5"
+
+services:
+  postgres:
+    container_name: wakacop-postgres-final
+    image: postgres:16-alpine
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - pgdata_v16:/var/lib/postgresql/data
+
+volumes:
+  pgdata_v16:
