@@ -45,31 +45,32 @@ public class SessaoVotacao {
         this.votos = new HashMap<>();
     }
 
-    public VotoPauta recebeVoto(VotoRequest votoRequest, AssociadoService associadoService) {
-        validaSessaoAberta();
+    public VotoPauta recebeVoto(VotoRequest votoRequest, AssociadoService associadoService, PublicadorResultadoSessao publicadorResultadoSessao) {
+        validaSessaoAberta(publicadorResultadoSessao);
         validaAssociado(votoRequest.getCpfAssociado(), votoRequest.getDataNascimento(), associadoService);
         VotoPauta voto = new VotoPauta(this, votoRequest);
         votos.put(votoRequest.getCpfAssociado(), voto);
         return voto;
     }
 
-    private void validaSessaoAberta() {
-        atualizaStatus();
+    private void validaSessaoAberta(PublicadorResultadoSessao publicadorResultadoSessao) {
+        atualizaStatus(publicadorResultadoSessao);
         if (this.status.equals(StatusSessaoVotacao.FECHADA)) {
             throw new RuntimeException("Sessão está fechada!");
         }
     }
 
-    private void atualizaStatus() {
+    private void atualizaStatus(PublicadorResultadoSessao publicadorResultadoSessao) {
         if (this.status.equals(StatusSessaoVotacao.ABERTA)) {
             if (LocalDateTime.now().isAfter(this.momentoEncerramento)) {
-                fechaSessao();
+                fechaSessao(publicadorResultadoSessao);
             }
         }
     }
 
-    private void fechaSessao() {
+    private void fechaSessao(PublicadorResultadoSessao publicadorResultadoSessao) {
         this.status = StatusSessaoVotacao.FECHADA;
+        publicadorResultadoSessao.publica(new ResultadoSessaoResponse(this));
     }
 
     private void validaAssociado(String cpfAssociado, String dataNascimento, AssociadoService associadoService) {
@@ -83,8 +84,8 @@ public class SessaoVotacao {
             throw new RuntimeException("Associado já votou nessa Sessão!");
         }
     }
-        public ResultadoSessaoResponse obetmResultado() {
-            atualizaStatus();
+        public ResultadoSessaoResponse obetmResultado(PublicadorResultadoSessao publicadorResultadoSessao) {
+            atualizaStatus(publicadorResultadoSessao);
             return new ResultadoSessaoResponse(this);
         }
 
