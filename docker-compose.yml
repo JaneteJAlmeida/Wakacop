@@ -13,5 +13,19 @@ services:
     volumes:
       - pgdata_v16:/var/lib/postgresql/data
 
+  localstack:
+    container_name: wakacop-localstack
+    image: localstack/localstack:latest
+    ports:
+      - "4566:4566"
+      - "4510-4559:4510-4559"
+    environment:
+      - SERVICES=sns
+      - DOCKER_HOST=unix:///var/run/docker.sock
+
+    volumes:
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      -
 volumes:
   pgdata_v16:
