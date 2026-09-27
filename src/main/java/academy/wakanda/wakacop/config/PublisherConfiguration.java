@@ -8,7 +8,6 @@ import com.amazonaws.services.sns.AmazonSNSAsync;
 import com.amazonaws.services.sns.AmazonSNSAsyncClientBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.aws.messaging.core.NotificationMessagingTemplate;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +20,7 @@ import java.util.Optional;
 @Log4j2
 public class PublisherConfiguration {
 
-    @Value("${aws.endpoint-override:#{null}}")
+    @Value("${aws.config.endpointuri:#{null}}")
     private String endpointUrlStr;
 
     @Value("${cloud.aws.region.static:#{null}}")
@@ -65,7 +64,12 @@ public class PublisherConfiguration {
 
     @Bean
     public NotificationMessagingTemplate notificationMessagingTemplate(AmazonSNS amazonSNS) {
-        return new NotificationMessagingTemplate(amazonSNS);
+        NotificationMessagingTemplate template = new NotificationMessagingTemplate(amazonSNS);
+
+        org.springframework.messaging.converter.CompositeMessageConverter compositeConverter =
+                (org.springframework.messaging.converter.CompositeMessageConverter) template.getMessageConverter();
+
+        return template;
     }
 
     private static final String DEFAULT_REGION = "us-east-1";

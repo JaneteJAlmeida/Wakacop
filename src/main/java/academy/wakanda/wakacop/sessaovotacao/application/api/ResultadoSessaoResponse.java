@@ -5,7 +5,6 @@ import academy.wakanda.wakacop.sessaovotacao.domain.StatusSessaoVotacao;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -14,8 +13,8 @@ public class ResultadoSessaoResponse {
     private UUID idSessao;
     private UUID idPauta;
     private StatusSessaoVotacao status;
-    private LocalDateTime momentoAbertura;
-    private LocalDateTime momentoEncerramento;
+    private String momentoAbertura;
+    private String momentoEncerramento;
     private Long totalVotos;
     private Long totalSim;
     private Long totalNao;
@@ -24,8 +23,11 @@ public class ResultadoSessaoResponse {
         this.idSessao = sessao.getId();
         this.idPauta = sessao.getIdPauta();
         this.status = sessao.getStatus();
-        this.momentoAbertura = sessao.getMomentoAbertura();
-        this.momentoEncerramento = sessao.getMomentoEncerramento();
+
+
+        this.momentoAbertura = sessao.getMomentoAbertura() != null ? sessao.getMomentoAbertura().toString() : null;
+        this.momentoEncerramento = sessao.getMomentoEncerramento() != null ? sessao.getMomentoEncerramento().toString() : null;
+
         this.totalVotos = sessao.getTotalVotos();
         this.totalSim = sessao.getTotalSim();
         this.totalNao = sessao.getTotalNao();
