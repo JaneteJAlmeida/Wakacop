@@ -6,10 +6,7 @@ import academy.wakanda.wakacop.sessaovotacao.api.VotoRequest;
 import academy.wakanda.wakacop.sessaovotacao.application.api.ResultadoSessaoResponse;
 import academy.wakanda.wakacop.sessaovotacao.application.api.SessaoAberturaRequest;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -20,6 +17,8 @@ import java.util.UUID;
 @ToString
 @Entity
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder(access = AccessLevel.PACKAGE)
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class SessaoVotacao {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -60,7 +59,7 @@ public class SessaoVotacao {
         }
     }
 
-    private void atualizaStatus(PublicadorResultadoSessao publicadorResultadoSessao) {
+    void atualizaStatus(PublicadorResultadoSessao publicadorResultadoSessao) {
         if (this.status.equals(StatusSessaoVotacao.ABERTA)) {
             if (LocalDateTime.now().isAfter(this.momentoEncerramento)) {
                 fechaSessao(publicadorResultadoSessao);
@@ -68,7 +67,7 @@ public class SessaoVotacao {
         }
     }
 
-    private void fechaSessao(PublicadorResultadoSessao publicadorResultadoSessao) {
+    void fechaSessao(PublicadorResultadoSessao publicadorResultadoSessao) {
         this.status = StatusSessaoVotacao.FECHADA;
         publicadorResultadoSessao.publica(new ResultadoSessaoResponse(this));
     }
