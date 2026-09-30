@@ -52,7 +52,7 @@ public class SessaoVotacao {
         return voto;
     }
 
-    private void validaSessaoAberta(PublicadorResultadoSessao publicadorResultadoSessao) {
+    void validaSessaoAberta(PublicadorResultadoSessao publicadorResultadoSessao) {
         atualizaStatus(publicadorResultadoSessao);
         if (this.status.equals(StatusSessaoVotacao.FECHADA)) {
             throw new RuntimeException("Sessão está fechada!");
@@ -72,7 +72,7 @@ public class SessaoVotacao {
         publicadorResultadoSessao.publica(new ResultadoSessaoResponse(this));
     }
 
-    private void validaAssociado(String cpfAssociado, String dataNascimento, AssociadoService associadoService) {
+    void validaAssociado(String cpfAssociado, String dataNascimento, AssociadoService associadoService) {
         associadoService.validaAssociadoAptoVoto(cpfAssociado, dataNascimento);
 
         validaVotoDuplicado(cpfAssociado);
@@ -83,11 +83,10 @@ public class SessaoVotacao {
             throw new RuntimeException("Associado já votou nessa Sessão!");
         }
     }
-        public ResultadoSessaoResponse obetmResultado(PublicadorResultadoSessao publicadorResultadoSessao) {
+    public ResultadoSessaoResponse obetmResultado(PublicadorResultadoSessao publicadorResultadoSessao) {
             atualizaStatus(publicadorResultadoSessao);
             return new ResultadoSessaoResponse(this);
         }
-
         public Long getTotalVotos () {
             return Long.valueOf(this.votos.size());
         }
@@ -96,15 +95,17 @@ public class SessaoVotacao {
             return calculaVotosPorOpcao(OpcaoVoto.SIM);
         }
 
-        public Long getTotalNao () {
-            return calculaVotosPorOpcao(OpcaoVoto.NAO);
+    public Long getTotalNao() {
+        return calculaVotosPorOpcao(OpcaoVoto.NAO);
+    }
 
-        }
-
-        private Long calculaVotosPorOpcao (OpcaoVoto opcao){
+    private Long calculaVotosPorOpcao (OpcaoVoto opcao){
             return votos.values().stream()
                     .filter(voto -> voto.opcaoIgual(opcao))
                     .count();
 
         }
+
+    public void recebeVoto(VotoPauta novoVoto) {
     }
+}
